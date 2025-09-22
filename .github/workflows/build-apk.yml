@@ -20,11 +20,14 @@ jobs:
         node-version: '18'
         cache: 'npm'
         
+    - name: Setup Expo and EAS
+      uses: expo/expo-github-action@v8
+      with:
+        eas-version: latest
+        token: ${{ secrets.GIZLI }}
+        
     - name: Install dependencies
-      run: npm install
-      
-    - name: Setup EAS CLI
-      run: npm install -g eas-cli
+      run: npm ci
       
     - name: Create eas.json config
       run: |
@@ -43,12 +46,5 @@ jobs:
           }
         }' > eas.json
         
-    - name: Authenticate with Expo
-      run: eas login --non-interactive
-      env:
-        EXPO_TOKEN: ${{ secrets.GIZLI }}
-        
     - name: Build APK
       run: eas build --platform android --profile preview --non-interactive
-      env:
-        EXPO_TOKEN: ${{ secrets.GIZLI }}
