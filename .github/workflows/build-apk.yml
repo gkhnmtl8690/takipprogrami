@@ -26,13 +26,10 @@ jobs:
         token: ${{ secrets.GIZLI }}
         
     - name: Install dependencies
-      working-directory: Expo
       run: npm ci
       
     - name: Verify EAS authentication
-      working-directory: Expo
       run: eas whoami
         
     - name: Build APK
-      working-directory: Expo
       run: eas build --platform android --profile preview --non-interactive
