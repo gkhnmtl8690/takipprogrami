@@ -23,9 +23,26 @@ jobs:
     - name: Install dependencies
       run: npm install
       
-    - name: Setup Expo CLI
-      run: npm install -g @expo/eas-cli
+    - name: Setup EAS CLI
+      run: npm install -g eas-cli
       
+    - name: Create eas.json config
+      run: |
+        echo '{
+          "build": {
+            "preview": {
+              "android": {
+                "buildType": "apk"
+              }
+            },
+            "production": {
+              "android": {
+                "buildType": "aab"
+              }
+            }
+          }
+        }' > eas.json
+        
     - name: Authenticate with Expo
       run: eas login --non-interactive
       env:
@@ -35,9 +52,3 @@ jobs:
       run: eas build --platform android --profile preview --non-interactive
       env:
         EXPO_TOKEN: ${{ secrets.GIZLI }}
-        
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: android-apk
-        path: '*.apk' 
